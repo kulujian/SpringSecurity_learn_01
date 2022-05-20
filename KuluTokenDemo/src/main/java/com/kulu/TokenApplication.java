@@ -16,9 +16,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 @MapperScan(value = "com.kulu.mapper")
 public class TokenApplication {
 	public static void main(String[] args) {
-		
-		ConfigurableApplicationContext run  =
 		SpringApplication.run(TokenApplication.class, args);
-		System.out.println(run);
 	}
 }
