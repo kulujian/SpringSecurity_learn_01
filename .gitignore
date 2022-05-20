@@ -1,0 +1,13 @@
+*
+!*/
+
+!KuluSecurityQuickStart/.settings/**
+!KuluSecurityQuickStart/src/**
+!KuluSecurityQuickStart/pom.xml
+
+!KuluTokenDemo/.settings/**
+!KuluTokenDemo/src/**
+!KuluTokenDemo/pom.xml
+
+!/.gitignore
+/.metadata/
