@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 
 import com.kulu.domain.User;
+import com.kulu.filter.JwtAuthenticationTokenFilter;
 import com.kulu.mapper.UserMapper;
 
 @SpringBootTest
@@ -18,11 +20,17 @@ public class MapperTest {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
-	
+		
 	@Test
-	public void TestBCryptPasswordEncoder() {
+	public void TestMethod() {
+//		String aa = null;
+//		System.out.println(StringUtils.hasText(aa));
+//		TestBCryptPasswordEncoder();
+//		testUserMapper();
+	}
 
+
+	private void TestBCryptPasswordEncoder() {
 		//  加密
 		//	雖然原文是一樣的，但是因為每次加密時都會產生隨機的【鹽】，透過隨機的【鹽】產生出來的密文才會不一樣
 //		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); // 透過屬性注入，就可以不用new物件

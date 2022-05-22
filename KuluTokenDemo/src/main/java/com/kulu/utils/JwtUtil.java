@@ -84,11 +84,11 @@ public class JwtUtil {
 //            "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjYWM2ZDVhZi1mNjVlLTQ0MDAtYjcxMi0zYWEwOGIyOTIwYjQiLCJzdWIiOiJzZyIsImlzcyI6InNnIiwiaWF0IjoxNjM4MTA2NzEyLCJleHAiOjE2MzgxMTAzMTJ9.JVsSbkP94wuczb4QryQbAke3ysBDIL5ou8fWsbt_ebg";
 //        Claims claims = parseJWT(token);
 //    	String jwt = createJWT("2123");
-    	Claims claims = parseJWT("eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0ZGE1N2Q3NTI4NWQ0NmJjYTMxMjM1ZGM5NGQzN2I5YyIsInN1YiI6IjIxMjMiLCJpc3MiOiJraiIsImlhdCI6MTY1MzAzNTQ5OCwiZXhwIjoxNjUzMDM5MDk4fQ.JWeiuqmWj8cP_S7C_e7TTTHN7m9BFutBhZR2Z2WbD-Q"); // 解析方法
+    	Claims claims = parseJWT("eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3MGFlNTE0NmRmMTE0MzMwYWVkNjY0MjI4MWVmNjkxNSIsInN1YiI6IjEiLCJpc3MiOiJraiIsImlhdCI6MTY1MzE4OTM0MiwiZXhwIjoxNjUzMTkyOTQyfQ.-uJTBxb8mgGbLY3BBYtu1G7y3Ld-Z7MghObLyx-Nc8g"); // 解析方法
     	String subject = claims.getSubject();
     	System.out.println(subject);
 //    	System.out.println(jwt);
-//        System.out.println(claims);
+        System.out.println(claims);
     }
 
     /**

@@ -3,6 +3,7 @@ package com.kulu.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kulu.domain.ResponseResult;
@@ -20,5 +21,10 @@ public class LoginController {
 		// 登入
 		
 		return loginService.login(user);
+	}
+	
+	@RequestMapping(path = "/user/logout")
+	public ResponseResult logout() {
+		return loginService.logout();
 	}
 }
