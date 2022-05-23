@@ -6,7 +6,8 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
+import com.kulu.utils.FastJsonRedisSerializer;
+
 
 @Configuration
 public class RedisConfig {
@@ -17,6 +18,7 @@ public class RedisConfig {
         RedisTemplate<Object, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
         
+        // 這邊要import自己定義的工具類 ...
         FastJsonRedisSerializer serializer = new FastJsonRedisSerializer(Object.class);
 
         // 使用 StringRedisSerializer 來序列化和反序列化 redis 的 key 值

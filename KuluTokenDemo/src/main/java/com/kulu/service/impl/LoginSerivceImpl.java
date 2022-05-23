@@ -38,6 +38,7 @@ public class LoginSerivceImpl implements LoginService{
 				new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword());
 		// 1.發現使用【AuthenticationManager】【authenticate】方法認證，需要傳入【Authentication】物件作為參數
 		Authentication authenticate = authenticationManager.authenticate(authenticationToken);
+		
 		// 如果認證沒通過，給出對應的提示
 		// 利用DeBug模式設置斷點，確認如何獲取【authenticate】內User信息
 		if(Objects.isNull(authenticate)) {
@@ -46,27 +47,19 @@ public class LoginSerivceImpl implements LoginService{
 		// 如果認證通過，使用【userid】生成一個【JWT】，【JWT】存入【ResponseResult】返回
 		// 獲取的信息是物件類型(Object)，需要強轉為LoginUser類型才能返回
 		LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
+
 		// 通過就能夠獲取ID，但因為型別所以使用【toString】轉換。
 		String userid = loginUser.getUser().getId().toString();
+
 		String jwt = JwtUtil.createJWT(userid);
+
 		// 設置傳送格式 token:jwt
 		Map<String, String> map = new HashMap<>();
 		map.put("token", jwt);
-		// 把完整的用戶信息存入【rebis】，【userid】作成【key】
-		redisCache.setCacheObject("login:"+userid, loginUser);
-		return new ResponseResult(200, "登入成功", map);
-	}
-
-	@Override
-	public ResponseResult logout() {
-		// 獲取【SecurityContextHolder】中的用戶id
-		UsernamePasswordAuthenticationToken authentication = 
-				(UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-		LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-		Long userid = loginUser.getUser().getId();
-		// 刪除【redis】中的值
-		redisCache.deleteObject("login:" + userid);
 		
-		return new ResponseResult<>(200, "注銷成功");
+		// 把完整的用戶信息存入【rebis】，【userid】作成【key】
+		redisCache.setCacheObject("login:" + userid, loginUser);
+
+		return new ResponseResult(200, "登入成功", map);
 	}
 }

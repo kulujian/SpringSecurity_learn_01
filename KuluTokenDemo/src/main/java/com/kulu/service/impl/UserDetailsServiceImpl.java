@@ -1,5 +1,8 @@
 package com.kulu.service.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +37,9 @@ public class UserDetailsServiceImpl implements UserDetailsService { // 【Detail
 			throw new RuntimeException("用戶名或者密碼錯誤");
 		}
 		// TODO 查詢對應的權限信息
+		List<String> list = new ArrayList<>(Arrays.asList("test", "admin"));
 		
 		// 把數據封裝成【UserDetails】物件返回
-		return new LoginUser(user);
+		return new LoginUser(user, list);
 	}	
 }

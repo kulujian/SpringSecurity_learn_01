@@ -67,7 +67,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter{
 		String redisKey = "login:" + userid;
 		// getCacheObject(String redisKey)，是經過封裝指定方法泛型，可以直接指定返回值的類型
 		// 它會根據調用類型來進行推測。
-		LoginUser loginUser =(LoginUser) rediscache.getCacheObject(redisKey);
+		LoginUser loginUser = rediscache.getCacheObject(redisKey);
 		// 需要進行判斷，因為有可能存在【redis】內不存在用戶信息的
 		if(Objects.isNull(loginUser)) {
 			throw new RuntimeException("用戶未登入");
@@ -77,7 +77,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter{
 			//	 使用三個參數進行封裝，第三個參數代表為：是否為已認證狀態
 			// TODO 獲取權限信息封裝到 Authentication 中 (還沒做)
 			UsernamePasswordAuthenticationToken authenticationToken = 
-					new UsernamePasswordAuthenticationToken(loginUser, null, null);
+					new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
 			// 1.設定【authentication】所需要的傳入參數為【authentication】，所以要將loginUser進行封裝
 			SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 		
