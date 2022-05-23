@@ -37,6 +37,7 @@ public class UserDetailsServiceImpl implements UserDetailsService { // 【Detail
 			throw new RuntimeException("用戶名或者密碼錯誤");
 		}
 		// TODO 查詢對應的權限信息
+		// 寫入權限信息(練習題，所以直接寫死)
 		List<String> list = new ArrayList<>(Arrays.asList("test", "admin"));
 		
 		// 把數據封裝成【UserDetails】物件返回
