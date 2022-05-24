@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.kulu.domain.LoginUser;
 import com.kulu.domain.User;
+import com.kulu.mapper.MenuMapper;
 import com.kulu.mapper.UserMapper;
 
 
@@ -24,6 +25,9 @@ public class UserDetailsServiceImpl implements UserDetailsService { // 【Detail
 	
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private MenuMapper menuMapper;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -37,8 +41,10 @@ public class UserDetailsServiceImpl implements UserDetailsService { // 【Detail
 			throw new RuntimeException("用戶名或者密碼錯誤");
 		}
 		// TODO 查詢對應的權限信息
-		// 寫入權限信息(練習題，所以直接寫死)
-		List<String> list = new ArrayList<>(Arrays.asList("test", "admin"));
+//		寫入權限信息(練習題，所以直接寫死)
+//			List<String> list = new ArrayList<>(Arrays.asList("test", "admin"));
+//		用【uesrid】查詢該用戶【perms】(權限信息)
+		List<String> list = menuMapper.selectPermsByUserid(user.getId());
 		
 		// 把數據封裝成【UserDetails】物件返回
 		return new LoginUser(user, list);

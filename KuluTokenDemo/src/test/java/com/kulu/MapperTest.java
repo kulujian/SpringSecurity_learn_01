@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 
 import com.kulu.domain.User;
 import com.kulu.filter.JwtAuthenticationTokenFilter;
+import com.kulu.mapper.MenuMapper;
 import com.kulu.mapper.UserMapper;
 
 @SpringBootTest
@@ -27,6 +28,7 @@ public class MapperTest {
 //		System.out.println(StringUtils.hasText(aa));
 //		TestBCryptPasswordEncoder();
 //		testUserMapper();
+//		testSelectPermsByUserId();
 	}
 
 
@@ -53,5 +55,13 @@ public class MapperTest {
 		
 		List<User> users = userMapper.selectList(null);
 		System.out.println(users);
+	}
+	
+	@Autowired
+	private MenuMapper menuMapper;
+	
+	public void testSelectPermsByUserId() {
+		List<String> list = menuMapper.selectPermsByUserid(2L);
+		System.out.println(list);
 	}
 }

@@ -75,7 +75,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter{
 		// 存入 SecurityContextHolder
 			// 2.找尋【Authentication】的實現類，創建一個對應的實現類物件並把【loginUser】封裝進去
 			//	 使用三個參數進行封裝，第三個參數代表為：是否為已認證狀態
-			// TODO 獲取權限信息封裝到 Authentication 中 (還沒做)
+			// TODO 獲取權限信息封裝到 Authentication 中
 			UsernamePasswordAuthenticationToken authenticationToken = 
 					new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
 			// 1.設定【authentication】所需要的傳入參數為【authentication】，所以要將loginUser進行封裝

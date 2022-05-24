@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
 
 	@RequestMapping(path = "/hello")
-	@PreAuthorize(value = "hasAuthority('test333')") //hasAuthority()，此方法會判斷戶用是否具有()內所標示的權限
+	@PreAuthorize(value = "hasAuthority('system:dept:list1')") //hasAuthority()，此方法會判斷戶用是否具有()內所標示的權限
 	public String hello() {
 		return "hello";
 	}

@@ -8,18 +8,18 @@ spring:
 #    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 #    username: maxeit
 #    password: M@xe0133
-    url: jdbc:mysql://localhost:3306/bilibili03?characterEncoding=utf-8&serverTimezone=UTC
-    username: root
-    password: Password123
-    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://192.168.1.189:3306/SpringSecurity?characterEncoding=utf-8&serverTimezone=UTC
-#    username: maxe0701
-#    password: Love1025
+#    url: jdbc:mysql://localhost:3306/bilibili03?characterEncoding=utf-8&serverTimezone=UTC
+#    username: root
+#    password: Password123
 #    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.1.189:3306/SpringSecurity?characterEncoding=utf-8&serverTimezone=UTC
+    username: maxe0701
+    password: Love1025
+    driver-class-name: com.mysql.cj.jdbc.Driver
     
     
 
 # 配置 MyBatis 相關資訊
-mybatis:
-  mapper-locations: classpath:mapper/*Mapper.xml  # mapper 映射文件路徑
-  type-aliases-package: com.kulu.domain  # 配置哪個包下的類有默認的別名
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*Mapper.xml  # mapper 映射文件路徑
+#  type-aliases-package: com.kulu.domain  # 配置哪個包下的類有默認的別名
