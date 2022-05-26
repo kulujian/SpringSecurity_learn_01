@@ -64,6 +64,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.antMatchers("/hello").permitAll()
 //				// 對於登入介面，允許匿名訪問
 				.antMatchers("/user/login").anonymous()
+				/*
+				 * 除了在Controller端口方法可以註解設定權限控制，也可以在這邊設定
+				 * 對於登入介面，必須擁有hasAuthority所標識的權限才可以訪問
+				 */
+				.antMatchers("/testCors").hasAuthority("system:dept:list")
 //				// 除上面外的所有請求全部需要鑒權認證
 				.anyRequest().authenticated();
 				

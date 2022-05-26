@@ -1,6 +1,6 @@
 package com.kulu.config;
 
-import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * 2. 重寫【addCorsMappings】方法
  * @author kulu.jian
  */
-@Configurable
+@Configuration
 public class CorsConfig implements WebMvcConfigurer{
 
 	@Override
