@@ -25,5 +25,4 @@ public class KuluSuccessHandler implements AuthenticationSuccessHandler{
 		System.out.println("認證成功了！");
 		
 	}
-
 }
