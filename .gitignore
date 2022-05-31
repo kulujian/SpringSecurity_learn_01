@@ -9,5 +9,13 @@
 !KuluTokenDemo/src/**
 !KuluTokenDemo/pom.xml
 
+!Maxe_Salse_01_static/.settings/**
+!Maxe_Salse_01_static/src/**
+!Maxe_Salse_01_static/pom.xml
+
+!Maxe_Salse_01_web/.settings/**
+!Maxe_Salse_01_web/src/**
+!Maxe_Salse_01_web/pom.xml
+
 !/.gitignore
 /.metadata/

@@ -1,0 +1,21 @@
+server:
+  port: 8591
+  
+# 配置 資料庫連線資訊
+spring:
+  datasource:
+    url: jdbc:sqlserver://192.168.1.33:1433;databasename=A_MAXE
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    username: maxeit
+    password: M@xe0133
+#    url: jdbc:mysql://192.168.1.189:3306/kulu_test?characterEncoding=utf-8&serverTimezone=UTC
+#    username: maxe0701
+#    password: Love1025
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+    
+    
+
+# 配置 MyBatis 相關資訊
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml  # mapper 映射文件路徑
+  type-aliases-package: com.maxe.domain  # 配置哪個包下的類有默認的別名

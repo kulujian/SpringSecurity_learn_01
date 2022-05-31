@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 【namespace】填寫映射的介面全類名 -->
+<mapper namespace="com.maxe.mapper.產品庫存Mapper">
+
+	<!-- 【id】請填寫映射的介面要使用方法名稱，【resultType】請填寫封裝物件(Bean)的全類名 -->
+	<!-- select syntax
+	-->
+	
+	<select id="轉出" resultType="com.maxe.domain.產品庫存MS">
+		<!-- select * from `IN_STOCK_try` where `貨品代號` LIKE CONCAT('%',#{model},'%') -->
+					SELECT 
+                        CONVERT(VARCHAR(16),  GETDATE(), 120) AS '異動時間', 
+                        B.TB004 AS '貨品代號', 
+                        -- B.TB005 AS '品名', 
+                        B.TB012 AS '倉庫', 
+                        C.MC002 AS '庫位名稱', 
+                        SUM(B.TB007 * -1) AS '現有存量',
+                        '轉出' AS '來源程式或目加總目的'
+                    FROM 
+                        A_MAXE..INVTA A INNER JOIN A_MAXE..INVTB B ON A.TA001 = B.TB001 
+                    AND 
+                        A.TA002 = B.TB002 INNER JOIN A_MAXE..CMSMC C ON B.TB012 = C.MC001
+                    WHERE 
+                        A.TA009 = '12' 
+                    AND 
+                        A.TA006 NOT IN ('Y', 'V')
+                    AND B.TB004 LIKE CONCAT('%', #{model}, '%') 
+                    GROUP BY B.TB004, B.TB005, B.TB012, C.MC002
+                    ORDER BY 1, 3 
+	</select>
+	
+	<select id="轉入" resultType="com.maxe.domain.產品庫存MS">
+					SELECT 
+                        CONVERT(VARCHAR(16),  GETDATE(), 120) AS '異動時間', 
+                        B.TB004 AS '貨品代號', 
+                        -- B.TB005 AS '品名', 
+                        B.TB013 AS '倉庫', 
+                        C.MC002 AS '庫位名稱', 
+                        SUM(B.TB007) AS '現有存量',
+                        '轉入' AS '來源程式或目加總目的'
+                    FROM 
+                        A_MAXE..INVTA A INNER JOIN A_MAXE..INVTB B ON A.TA001 = B.TB001 
+                    AND 
+                        A.TA002 = B.TB002 INNER JOIN A_MAXE..CMSMC C ON B.TB013 = C.MC001
+                    WHERE 
+                        A.TA009 = '12'
+                    AND 
+                        A.TA006 NOT IN ('Y', 'V')
+                    AND B.TB004 LIKE CONCAT('%', #{model}, '%')
+                    GROUP BY B.TB004, B.TB005, B.TB013, C.MC002
+                    ORDER BY 1, 3 
+	</select>
+	
+	<select id="未確認的庫存異動單" resultType="com.maxe.domain.產品庫存MS">
+					SELECT 
+                        -- A.TA001, 
+                        -- A.TA002, 
+                        CONVERT(VARCHAR(16), GETDATE(), 120) AS '異動時間', 
+                        B.TB004 AS '貨品代號', 
+                        -- B.TB005 AS '品名', 
+                        B.TB012 AS '倉庫', 
+                        C.MC002 AS '庫位名稱', 
+                        SUM(B.TB007) AS '現有存量',
+                        '未確認的庫存異動單' AS '來源程式或目加總目的' 
+                    FROM 
+                        A_MAXE..INVTA A INNER JOIN A_MAXE..INVTB B ON A.TA001 = B.TB001 
+                    AND 
+                        A.TA002 = B.TB002 INNER JOIN A_MAXE..CMSMC C ON B.TB012 = C.MC001
+                    WHERE 
+                        A.TA009 = '11'
+                    AND 
+                        A.TA006 NOT IN ('Y', 'V') 
+                    AND 
+                        A.MODIFIER = '0613'
+                    AND B.TB004 LIKE CONCAT('%', #{model}, '%')
+                    GROUP BY A.TA001, A.TA002, B.TB004, B.TB005, B.TB012, C.MC002
+                    ORDER BY 1, 3 
+	</select>
+	
+	<select id="未確認的銷貨單" resultType="com.maxe.domain.產品庫存MS">
+					SELECT 
+                        CONVERT(VARCHAR(16), GETDATE(), 120) AS '異動時間', 
+                        B.TH004 AS '貨品代號', 
+                        -- B.TH005 AS '品名', 
+                        B.TH007 AS '倉庫', 
+                        C.MC002 AS '庫位名稱', 
+                        SUM(B.TH008 * -1) AS '現有存量',
+                        '未確認的銷貨單' AS '來源程式或目加總目的'
+                    FROM 
+                        A_MAXE..COPTG A INNER JOIN A_MAXE..COPTH B ON A.TG001 = B.TH001 
+                    AND 
+                        A.TG002 = B.TH002 INNER JOIN A_MAXE..CMSMC C ON B.TH007 = C.MC001
+                    WHERE 
+                        A.TG023 NOT IN ('Y', 'V') 
+                    AND B.TH004 LIKE CONCAT('%', #{model}, '%')
+                    GROUP BY  B.TH004, B.TH005, B.TH007, C.MC002
+	</select>
+	
+	<select id="原始單據" resultType="com.maxe.domain.產品庫存MS">
+					SELECT CONVERT(VARCHAR(16),  GETDATE(), 120) AS '異動時間', 
+                        TRIM(A.MB001) AS '貨品代號', 
+                        TRIM(B.MC002) AS '倉庫', 
+                        TRIM(C.MC002) AS '庫位名稱', 
+                        B.MC007 AS '現有存量',
+                        '原始資料' AS '來源程式或目加總目的' 
+                    FROM 
+                        A_MAXE..INVMB A INNER JOIN A_MAXE..INVMC B 
+                    ON 
+                        A.MB001 = B.MC001 INNER JOIN A_MAXE..CMSMC C 
+                    ON 
+                        B.MC002 = C.MC001
+                    AND 
+                        C.MC004 = '1' 
+                    AND 
+                        C.MC005 = 'Y'
+                    AND
+                        ((SUBSTRING(C.MC001, 1,1) = 'A' 
+                    AND 
+                        SUBSTRING(C.MC001, 5,1) = '1') 
+                    OR 
+                        SUBSTRING(C.MC001, 1,1) = 'B')
+                    WHERE A.MB001 LIKE CONCAT('%', #{model}, '%')
+	</select>
+	
+	
+	<select id="一步到位" resultType="com.maxe.domain.產品庫存MS">
+		SELECT * from (
+			Select * From (
+				select 異動時間, 貨品代號, 'Z0001' AS '倉庫', '合計' AS '庫位名稱' , SUM(現有存量) AS '現有存量' from (
+					select * from 	(
+						-- 轉出
+						SELECT 
+						    CONVERT(VARCHAR(16),  GETDATE(), 120) AS '異動時間', 
+						    B.TB004 AS '貨品代號', 
+						    -- B.TB005 AS '品名', 
+						    B.TB012 AS '倉庫', 
+						    C.MC002 AS '庫位名稱', 
+						    SUM(B.TB007 * -1) AS '現有存量',
+						    '轉出' AS '來源程式或目加總目的'
+						FROM 
+						    A_MAXE..INVTA A INNER JOIN A_MAXE..INVTB B ON A.TA001 = B.TB001 
+						AND 
+						    A.TA002 = B.TB002 INNER JOIN A_MAXE..CMSMC C ON B.TB012 = C.MC001
+						WHERE 
+						    A.TA009 = '12' 
+						AND 
+						    A.TA006 NOT IN ('Y', 'V')
+						AND B.TB004 LIKE CONCAT('%',#{model},'%') 
+						GROUP BY B.TB004, B.TB005, B.TB012, C.MC002
+						--ORDER BY 1, 3 
+					) AA UNION ALL
+					select * from (
+						--轉入
+						SELECT 
+						    CONVERT(VARCHAR(16),  GETDATE(), 120) AS '異動時間', 
+						    B.TB004 AS '貨品代號', 
+						    -- B.TB005 AS '品名', 
+						    B.TB013 AS '倉庫', 
+						    C.MC002 AS '庫位名稱', 
+						    SUM(B.TB007) AS '現有存量',
+						    '轉入' AS '來源程式或目加總目的'
+						FROM 
+						    A_MAXE..INVTA A INNER JOIN A_MAXE..INVTB B ON A.TA001 = B.TB001 
+						AND 
+						    A.TA002 = B.TB002 INNER JOIN A_MAXE..CMSMC C ON B.TB013 = C.MC001
+						WHERE 
+						    A.TA009 = '12'
+						AND 
+						    A.TA006 NOT IN ('Y', 'V')
+						AND B.TB004 LIKE CONCAT('%',#{model},'%') 
+						GROUP BY B.TB004, B.TB005, B.TB013, C.MC002
+						--ORDER BY 1, 3 
+					) BB UNION ALL
+					select * from  (
+						--未確認的庫存異動單
+						SELECT 
+						    -- A.TA001, 
+						    -- A.TA002, 
+						    CONVERT(VARCHAR(16), GETDATE(), 120) AS '異動時間', 
+						    B.TB004 AS '貨品代號', 
+						    -- B.TB005 AS '品名', 
+						    B.TB012 AS '倉庫', 
+						    C.MC002 AS '庫位名稱', 
+						    SUM(B.TB007) AS '現有存量',
+						    '未確認的庫存異動單' AS '來源程式或目加總目的' 
+						FROM 
+						    A_MAXE..INVTA A INNER JOIN A_MAXE..INVTB B ON A.TA001 = B.TB001 
+						AND 
+						    A.TA002 = B.TB002 INNER JOIN A_MAXE..CMSMC C ON B.TB012 = C.MC001
+						WHERE 
+						    A.TA009 = '11'
+						AND 
+						    A.TA006 NOT IN ('Y', 'V') 
+						AND 
+						    A.MODIFIER = '0613'
+						AND B.TB004 LIKE CONCAT('%',#{model},'%')  
+						GROUP BY A.TA001, A.TA002, B.TB004, B.TB005, B.TB012, C.MC002
+						--ORDER BY 1, 3 
+					) CC UNION ALL
+					select * from (
+						--未確認的銷貨單
+						SELECT 
+						    CONVERT(VARCHAR(16), GETDATE(), 120) AS '異動時間', 
+						    B.TH004 AS '貨品代號', 
+						    -- B.TH005 AS '品名', 
+						    B.TH007 AS '倉庫', 
+						    C.MC002 AS '庫位名稱', 
+						    SUM(B.TH008 * -1) AS '現有存量',
+						    '未確認的銷貨單' AS '來源程式或目加總目的'
+						FROM 
+						    A_MAXE..COPTG A INNER JOIN A_MAXE..COPTH B ON A.TG001 = B.TH001 
+						AND 
+						    A.TG002 = B.TH002 INNER JOIN A_MAXE..CMSMC C ON B.TH007 = C.MC001
+						WHERE 
+						    A.TG023 NOT IN ('Y', 'V') 
+						AND B.TH004 LIKE  CONCAT('%',#{model},'%') 
+						GROUP BY  B.TH004, B.TH005, B.TH007, C.MC002
+					) DD UNION ALL
+					select * from (
+					--原始數據
+						SELECT CONVERT(VARCHAR(16),  GETDATE(), 120) AS '異動時間', 
+						    TRIM(A.MB001) AS '貨品代號', 
+						    TRIM(B.MC002) AS '倉庫', 
+						    TRIM(C.MC002) AS '庫位名稱', 
+						    B.MC007 AS '現有存量',
+						    '原始資料' AS '來源程式或目加總目的' 
+						FROM 
+						    A_MAXE..INVMB A INNER JOIN A_MAXE..INVMC B 
+						ON 
+						    A.MB001 = B.MC001 INNER JOIN A_MAXE..CMSMC C 
+						ON 
+						    B.MC002 = C.MC001
+						AND 
+						    C.MC004 = '1' 
+						AND 
+						    C.MC005 = 'Y'
+						AND
+						    ((SUBSTRING(C.MC001, 1,1) = 'A' 
+						AND 
+						    SUBSTRING(C.MC001, 5,1) = '1') 
+						OR 
+						    SUBSTRING(C.MC001, 1,1) = 'B')
+						WHERE A.MB001 LIKE CONCAT('%',#{model},'%') 
+					) EE 
+				)FF  WHERE 現有存量 <![CDATA[ <> ]]> 0 GROUP BY 異動時間, 貨品代號
+			)GG UNION ALL
+			Select * From (
+				select 異動時間, 貨品代號, 倉庫, 庫位名稱 , SUM(現有存量) AS '現有存量' from (
+					select * from 	(
+						-- 轉出
+						SELECT 
+						    CONVERT(VARCHAR(16),  GETDATE(), 120) AS '異動時間', 
+						    B.TB004 AS '貨品代號', 
+						    -- B.TB005 AS '品名', 
+						    B.TB012 AS '倉庫', 
+						    C.MC002 AS '庫位名稱', 
+						    SUM(B.TB007 * -1) AS '現有存量',
+						    '轉出' AS '來源程式或目加總目的'
+						FROM 
+						    A_MAXE..INVTA A INNER JOIN A_MAXE..INVTB B ON A.TA001 = B.TB001 
+						AND 
+						    A.TA002 = B.TB002 INNER JOIN A_MAXE..CMSMC C ON B.TB012 = C.MC001
+						WHERE 
+						    A.TA009 = '12' 
+						AND 
+						    A.TA006 NOT IN ('Y', 'V')
+						AND B.TB004 LIKE CONCAT('%',#{model},'%') 
+						GROUP BY B.TB004, B.TB005, B.TB012, C.MC002
+						--ORDER BY 1, 3 
+					) HH UNION ALL
+					select * from (
+						--轉入
+						SELECT 
+						    CONVERT(VARCHAR(16),  GETDATE(), 120) AS '異動時間', 
+						    B.TB004 AS '貨品代號', 
+						    -- B.TB005 AS '品名', 
+						    B.TB013 AS '倉庫', 
+						    C.MC002 AS '庫位名稱', 
+						    SUM(B.TB007) AS '現有存量',
+						    '轉入' AS '來源程式或目加總目的'
+						FROM 
+						    A_MAXE..INVTA A INNER JOIN A_MAXE..INVTB B ON A.TA001 = B.TB001 
+						AND 
+						    A.TA002 = B.TB002 INNER JOIN A_MAXE..CMSMC C ON B.TB013 = C.MC001
+						WHERE 
+						    A.TA009 = '12'
+						AND 
+						    A.TA006 NOT IN ('Y', 'V')
+						AND B.TB004 LIKE CONCAT('%',#{model},'%') 
+						GROUP BY B.TB004, B.TB005, B.TB013, C.MC002
+						--ORDER BY 1, 3 
+					) II UNION ALL
+					select * from  (
+						--未確認的庫存異動單
+						SELECT 
+						    -- A.TA001, 
+						    -- A.TA002, 
+						    CONVERT(VARCHAR(16), GETDATE(), 120) AS '異動時間', 
+						    B.TB004 AS '貨品代號', 
+						    -- B.TB005 AS '品名', 
+						    B.TB012 AS '倉庫', 
+						    C.MC002 AS '庫位名稱', 
+						    SUM(B.TB007) AS '現有存量',
+						    '未確認的庫存異動單' AS '來源程式或目加總目的' 
+						FROM 
+						    A_MAXE..INVTA A INNER JOIN A_MAXE..INVTB B ON A.TA001 = B.TB001 
+						AND 
+						    A.TA002 = B.TB002 INNER JOIN A_MAXE..CMSMC C ON B.TB012 = C.MC001
+						WHERE 
+						    A.TA009 = '11'
+						AND 
+						    A.TA006 NOT IN ('Y', 'V') 
+						AND 
+						    A.MODIFIER = '0613'
+						AND B.TB004 LIKE CONCAT('%',#{model},'%')  
+						GROUP BY A.TA001, A.TA002, B.TB004, B.TB005, B.TB012, C.MC002
+						--ORDER BY 1, 3 
+					) JJ UNION ALL
+					select * from (
+						--未確認的銷貨單
+						SELECT 
+						    CONVERT(VARCHAR(16), GETDATE(), 120) AS '異動時間', 
+						    B.TH004 AS '貨品代號', 
+						    -- B.TH005 AS '品名', 
+						    B.TH007 AS '倉庫', 
+						    C.MC002 AS '庫位名稱', 
+						    SUM(B.TH008 * -1) AS '現有存量',
+						    '未確認的銷貨單' AS '來源程式或目加總目的'
+						FROM 
+						    A_MAXE..COPTG A INNER JOIN A_MAXE..COPTH B ON A.TG001 = B.TH001 
+						AND 
+						    A.TG002 = B.TH002 INNER JOIN A_MAXE..CMSMC C ON B.TH007 = C.MC001
+						WHERE 
+						    A.TG023 NOT IN ('Y', 'V') 
+						AND B.TH004 LIKE  CONCAT('%',#{model},'%') 
+						GROUP BY  B.TH004, B.TH005, B.TH007, C.MC002
+					) KK UNION ALL
+					select * from (
+					--原始數據
+						SELECT CONVERT(VARCHAR(16),  GETDATE(), 120) AS '異動時間', 
+						    TRIM(A.MB001) AS '貨品代號', 
+						    TRIM(B.MC002) AS '倉庫', 
+						    TRIM(C.MC002) AS '庫位名稱', 
+						    B.MC007 AS '現有存量',
+						    '原始資料' AS '來源程式或目加總目的' 
+						FROM 
+						    A_MAXE..INVMB A INNER JOIN A_MAXE..INVMC B 
+						ON 
+						    A.MB001 = B.MC001 INNER JOIN A_MAXE..CMSMC C 
+						ON 
+						    B.MC002 = C.MC001
+						AND 
+						    C.MC004 = '1' 
+						AND 
+						    C.MC005 = 'Y'
+						AND
+						    ((SUBSTRING(C.MC001, 1,1) = 'A' 
+						AND 
+						    SUBSTRING(C.MC001, 5,1) = '1') 
+						OR 
+						    SUBSTRING(C.MC001, 1,1) = 'B')
+						WHERE A.MB001 LIKE CONCAT('%',#{model},'%') 
+					) LL 
+				)MM WHERE 現有存量 <![CDATA[ <> ]]> 0 GROUP BY 異動時間, 貨品代號, 倉庫, 庫位名稱
+			)NN
+		)OO ORDER BY 2, 3
+	</select>
+	
+</mapper>
