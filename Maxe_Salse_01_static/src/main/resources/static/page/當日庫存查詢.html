@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+        <title>庫存狀態查詢</title>
+
+        
+        <style>
+            .disN{
+                display: none
+            }
+
+            .left{
+                text-align: left
+            }
+
+            .right{
+                text-align: right
+            }
+
+        </style>
+
+    </head>
+
+    <body>
+    	<br>
+        <div  id="formMess" style="text-align: center">
+        
+	        <h1>庫存狀態查詢</h1>
+	        <br>
+	        
+	        <div>
+				<form @submit.prevent="demo">
+			        <input type="text" placeholder="請輸入日期" maxlength="8" minlength="8" required="required" v-model="msg.date">
+			        <input type="text" placeholder="請輸入型號" required="required" v-model="msg.model">
+			        <!-- <input type="text" placeholder="請輸入倉別" v-model="msg.storehouse"> -->
+			        <select v-model="msg.storehouse">
+			        	<option value="A0001">台北倉</option>
+			        	<option value="A1001">台中倉</option>
+			        	<option value="A2001">高雄倉</option>
+			        	<option value="A3001">台南倉</option>
+			        	<option value="A4001">湖口倉</option>
+			        	<option value="A5001">宜蘭倉</option>
+			        	<option value="A6001">嘉義倉</option>
+			        	<option value="A7001">桃園倉</option>
+			        	<option value="A8001">彰投倉</option>
+			        	<option value="A9001">花蓮倉</option>
+			        	<option value="B0001">冠茂倉</option>
+			        </select>
+		        	<button>查詢</button>
+				</form>
+	        </div>
+	        <br>
+	        
+	        <pre v-html="syntax">
+			</pre>
+			<br>
+			
+
+	        
+	        <div style="text-align: conter" v-if="status === 200">
+	        
+			<!--
+	            <div v-for="(model, index) in models" v-if="index > 0">
+	        -->
+
+        		<table border="1">
+	                <thead>
+						<tr>
+							<th>品號</th>
+							<th>品名</th>
+							<th>庫存日期</th>
+							<th>庫別</th>
+							<th>庫別名稱</th>
+							<th>前日庫存</th>
+							<th>銷貨數量</th>
+							<th>銷退數量</th>
+							<th>轉出數量</th>
+							<th>轉入數量</th>
+							<th>暫出數量</th>
+							<th>當日庫存</th>
+						</tr>
+	                </thead>
+        			<tbody>
+            			<div >
+							<tr v-for="(model, index) in models">
+								<td>&nbsp;{{model.品號}}&nbsp;</td>
+								<td>&nbsp;{{model.品名}}&nbsp;</td>
+								<td>&nbsp;{{model.庫存日期}}&nbsp;</td>
+								<td>&nbsp;{{model.庫別}}&nbsp;</td>
+								<td>{{model.庫別名稱}}</td>
+								<td>{{model.前日庫存}}</td>
+								<td>{{model.銷貨數量}}</td>
+								<td>{{model.銷退數量}}</td>
+								<td>{{model.轉出數量}}</td>
+								<td>{{model.轉入數量}}</td>
+								<td>{{model.暫出數量}}</td>
+								<td>{{model.當日庫存}}</td>
+							</tr>
+    					</div>
+        			</tbody>
+            	</table>
+        		<!-- 
+        		<div  v-else="index == 0">
+	            	<table border="1">
+		                <thead>
+		                    <tr>
+		                        <th colspan=2>{{model.品號}}</th>
+		                    </tr>
+		                </thead>
+	        			<tbody>
+	        				<tr>
+		                        <td>{{model.庫位名稱}}</td>
+		                        <td>{{model.現有存量}}</td>
+	        				</tr>
+	        			</tbody>
+	            	</table>
+        		</div>
+	          	-->
+	        </div>
+	           
+	        
+				<!-- 
+					{{ syntax }} 
+					<pre v-html="models">
+					</pre>
+				-->
+        </div>
+        
+        
+        
+        <!-- Bottstrap -->
+        	<link rel="stylesheet" href="../../vendor/bootstrap-4.2.1/dist/css/bootstrap.min.css">
+	    <!--jQuery库必须在其他js之前引入！-->
+		    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+			<script src="../../vendor/bootstrap-4.2.1/dist/js/bootstrap.min.js"></script>
+			
+	    <!-- Vue 开发环境版本，包含了有帮助的命令行警告 -->
+		    <script src="../../vendor/vue-dev/dist/vue.js"></script>
+		    <!-- 
+		    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+		     -->
+	    <!-- axios -->
+		    <script src="../../vendor/axios-master/dist/axios.js"></script>
+		    <!-- 
+		    <script src="https://unpkg.com/axios/dist/axios.js"></script>
+		     -->
+
+        
+        <script type="text/javascript">
+        	
+        	var d = new Date();
+        	var nowDate = ""+d.getFullYear()+((d.getMonth()+1)<10?"0"+(d.getMonth()+1):(d.getMonth()+1))+(d.getDate()<10?"0"+d.getDate():d.getDate());
+        	
+        
+			Vue.config.productionTip = false
+		
+			new Vue({
+				el: '#formMess',
+				data: {
+					msg: {
+						date: nowDate,
+						model: '',
+						storehouse: 'A4001'
+					},
+					models: '',
+					syntax: '',
+					status: ''
+				},
+				methods: {
+					demo() {
+						alert(JSON.stringify(this.msg));
+						console.log(JSON.stringify(this.msg));
+						
+	                    //請求後台介面，把接收到的數據渲染展示在頁面中
+	                    axios.post("http://localhost:8592/search/model", {
+	                    	//data: {
+								date: ""+this.msg.date,
+								model: ""+this.msg.model,
+								storehouse: ""+this.msg.storehouse
+							//}
+						}).then((res)=>{
+	                        //console.log(res);
+	                        // 判斷是否成功 code == 200
+	                        if(res.data.code == 200){
+									this.status = 200
+	                            // 判斷是否有值，如果有值把數據賦值給 this.models
+	                            if(Object.keys(res.data.data).length > 0 ){
+		                            this.models = res.data.data;
+		                            this.syntax = res.data.msg;
+								}else{
+									this.syntax = res.data.msg;
+								}
+	                        }
+	                    }).catch((error)=>{
+	                        console.log("失敗: " + error);
+	                    });
+					}
+				}
+			})
+		</script>
+        
+    </body>
+
+</html>

@@ -9,6 +9,10 @@
 !KuluTokenDemo/src/**
 !KuluTokenDemo/pom.xml
 
+!Maxe_InStock_01_web/.settings/**
+!Maxe_InStock_01_web/src/**
+!Maxe_InStock_01_web/pom.xml
+
 !Maxe_Salse_01_static/.settings/**
 !Maxe_Salse_01_static/src/**
 !Maxe_Salse_01_static/pom.xml
