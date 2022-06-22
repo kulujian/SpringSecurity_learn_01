@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 【namespace】填寫映射的介面全類名 -->
+<mapper namespace="com.kulu.mapper.MoneyMapper">
+
+
+	<!-- 【id】請填寫映射的介面要使用方法名稱，【resultType】請填寫封裝物件(Bean)的全類名 -->
+	<!-- select syntax
+	<select id="" resultType="">
+		select * from [table name] where
+	</select>
+	-->
+	
+	    <resultMap id="BaseResultMap" type="com.kulu.entity.MoneyPo">
+	        <id column="id" property="id" jdbcType="INTEGER"/>
+	        <result column="name" property="name" jdbcType="VARCHAR"/>
+	        <result column="money" property="money" jdbcType="INTEGER"/>
+	        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
+	        <result column="create_at" property="createAt" jdbcType="TIMESTAMP"/>
+	        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP"/>
+	    </resultMap>
+	    
+	    <sql id="money_po">
+	      id, `name`, money, is_deleted, create_at, update_at
+	    </sql>
+	
+	    <select id="findByIds" parameterType="list" resultMap="BaseResultMap">
+	        select
+	        <include refid="money_po"/>
+	        from money where id in
+	        <foreach item="id" collection="list" separator="," open="(" close=")" index="">
+	            #{id}
+	        </foreach>
+	    </select>
+	    
+	<!-- insert syntax
+	<insert id="">
+		insert into [table name] ([column1],[column2]) values ([value1],[value2])
+	</insert>
+	-->
+	
+	<!-- update syntax
+	<update id="">
+		update [table name] set [column]=[value] where
+	</update>
+	-->
+	
+	<!-- delete syntax
+	<delete id="">
+		delete from [table name] where 
+	</delete>
+	-->
+</mapper>

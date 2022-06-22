@@ -27,9 +27,11 @@
     </head>
 
     <body>
-    	<br>
+	    <a href="/">
+	        <button style="font-size: 18px;">返回</button>
+	    </a>
+        <br>
         <div  id="formMess" style="text-align: center">
-        
 	        <h1>即時庫存查詢</h1>
 	        <br>
 	        
@@ -92,12 +94,20 @@
         
 	    <!-- Vue 开发环境版本，包含了有帮助的命令行警告 -->
 		    <script src="../../vendor/vue-dev/dist/vue.js"></script>
+		    <!--
 		    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+		    -->
 	    <!-- axios -->
 		    <script src="../../vendor/axios-master/dist/axios.js"></script>
+		    <!--
 		    <script src="https://unpkg.com/axios/dist/axios.js"></script>
+		    -->
+		    
         <!-- Bottstrap -->
         	<link rel="stylesheet" href="../../vendor/bootstrap-4.2.1/dist/css/bootstrap.min.css">
+	    <!--jQuery库必须在其他js之前引入！-->
+		    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
 			<script src="../../vendor/bootstrap-4.2.1/dist/js/bootstrap.min.js"></script>
 
         
@@ -121,7 +131,7 @@
 						console.log(JSON.stringify(this.msg));
 						
 	                    //請求後台介面，把接收到的數據渲染展示在頁面中
-	                    axios.post("http://localhost:8591/product/search", {
+	                    axios.post("http://localhost:8593/product/即時", {
 	                    	//data: {
 								model: ""+this.msg.model
 							//}

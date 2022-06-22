@@ -8,6 +8,11 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import com.kulu.utils.FastJsonRedisSerializer;
 
+/**
+ * Redis 工具類
+ * 
+ * @author user
+ */
 
 @Configuration
 public class RedisConfig {

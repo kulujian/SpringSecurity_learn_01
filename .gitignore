@@ -21,5 +21,9 @@
 !Maxe_Salse_01_web/src/**
 !Maxe_Salse_01_web/pom.xml
 
+!MyBatisConnDB/.settings/**
+!MyBatisConnDB/src/**
+!MyBatisConnDB/pom.xml
+
 !/.gitignore
 /.metadata/

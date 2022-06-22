@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 【namespace】填寫映射的介面全類名 -->
+<mapper namespace="com.kulu.mapper.當日庫存Mapper">
+
+	<!-- 【id】請填寫映射的介面要使用方法名稱，【resultType】請填寫封裝物件(Bean)的全類名 -->
+	<!-- select syntax -->
+	<select id="查詢" resultType="com.kulu.domain.當日庫存">
+		EXEC B_IT_01..spm_DailyInventory #{date}, #{model}, #{storehouse}
+	</select>
+	
+</mapper>

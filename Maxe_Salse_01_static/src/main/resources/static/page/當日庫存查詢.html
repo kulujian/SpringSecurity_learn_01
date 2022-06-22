@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-        <title>庫存狀態查詢</title>
+        <title>當日庫存狀態查詢</title>
 
         
         <style>
@@ -27,15 +27,21 @@
     </head>
 
     <body>
-    	<br>
-        <div  id="formMess" style="text-align: center">
+
+	    <a href="/">
+	    	<button style="font-size: 18px;">返回</button>
+	    </a>
+        <br>
         
-	        <h1>庫存狀態查詢</h1>
+        <div  id="formMess" style="text-align: center">
+        	
+	        <h1>當日庫存狀態查詢</h1>
 	        <br>
 	        
 	        <div>
 				<form @submit.prevent="demo">
-			        <input type="text" placeholder="請輸入日期" maxlength="8" minlength="8" required="required" v-model="msg.date">
+			        <input type="date" placeholder="請輸入日期" required="required" v-model="msg.date">
+			        <!-- <input type="text" placeholder="請輸入日期" maxlength="8" minlength="8" required="required" v-model="msg.date"> -->
 			        <input type="text" placeholder="請輸入型號" required="required" v-model="msg.model">
 			        <!-- <input type="text" placeholder="請輸入倉別" v-model="msg.storehouse"> -->
 			        <select v-model="msg.storehouse">
@@ -178,7 +184,7 @@
 						console.log(JSON.stringify(this.msg));
 						
 	                    //請求後台介面，把接收到的數據渲染展示在頁面中
-	                    axios.post("http://localhost:8592/search/model", {
+	                    axios.post("http://localhost:8593/product/當日", {
 	                    	//data: {
 								date: ""+this.msg.date,
 								model: ""+this.msg.model,
